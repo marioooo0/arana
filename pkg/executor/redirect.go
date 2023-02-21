@@ -83,7 +83,7 @@ type RedirectExecutor struct {
 	localTransactionMap sync.Map // map[uint32]proto.Tx, (connectionID,Tx)
 }
 
-func NewRedirectExecutor() *RedirectExecutor {
+func NewRedirectExecutor() *RedirectExecutor { //todo excutor优先看
 	return &RedirectExecutor{}
 }
 
@@ -297,13 +297,16 @@ func (executor *RedirectExecutor) doExecutorComQuery(ctx *proto.Context, act ast
 	return res, warn, err
 }
 
+//优化器在哪里？
+//调用mysql在哪里？
 func (executor *RedirectExecutor) ExecutorComQuery(ctx *proto.Context, h func(result proto.Result, warns uint16, failure error) error) error {
 	p := parser.New()
-	query := ctx.GetQuery()
+	query := ctx.GetQuery() //sql query语句
 	log.Debugf("ComQuery: %s", query)
 
 	charset, collation := getCharsetCollation(ctx.C.CharacterSet())
 
+	//fast path
 	switch strings.IndexByte(query, ';') {
 	case -1: // no ';' exists
 		stmt, err := p.ParseOneStmt(query, charset, collation)

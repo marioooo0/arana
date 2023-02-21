@@ -38,7 +38,7 @@ type TenantManager interface {
 	// GetTenantsOfCluster returns all tenants of cluster.
 	GetTenantsOfCluster(cluster string) []string
 	// PutUser puts a user into tenant.
-	PutUser(tenant string, user *config.User)
+	PutUser(tenant string, user *config.User) //一个租户下多个用户，租户=公司，用户=公司员工？
 	// RemoveUser removes a user from tenant.
 	RemoveUser(tenant string, username string)
 	// PutCluster puts a cluster into tenant.
@@ -46,7 +46,7 @@ type TenantManager interface {
 	// RemoveCluster removes a cluster from tenant.
 	RemoveCluster(tenant string, cluster string)
 	// SetSupervisor gets supervisor info
-	SetSupervisor(supervisor *config.User)
+	SetSupervisor(supervisor *config.User) //这个租户（公司）里面的超级管理员
 	// GetSupervisor gets supervisor info
 	GetSupervisor() *config.User
 }
@@ -56,6 +56,7 @@ type tenantItem struct {
 	users    map[string]*config.User
 }
 
+//租户管理器，为什么要有这样一个单独的管理器，已经有很多单独的map存了多次cluster信息了。
 type simpleTenantManager struct {
 	sync.RWMutex
 	supervisor *config.User

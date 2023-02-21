@@ -102,7 +102,7 @@ type ConfigWatcher interface {
 	WatchShadowRule(ctx context.Context, tenant string) (<-chan config.ShadowRuleEvent, context.CancelFunc, error)
 }
 
-type Discovery interface {
+type Discovery interface { //配置发现
 	ConfigProvider
 	ConfigWatcher
 	// ListListeners lists the listener names

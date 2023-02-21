@@ -114,6 +114,7 @@ func NewListener(conf *config.Listener) (proto.Listener, error) {
 		ServerVersion: conf.ServerVersion,
 	}
 
+	//bootstrap 里面的 ip port
 	l, err := net.Listen("tcp", fmt.Sprintf("%s:%d", conf.SocketAddress.Address, conf.SocketAddress.Port))
 	if err != nil {
 		log.Errorf("listen %s:%d error, %s", conf.SocketAddress.Address, conf.SocketAddress.Port, err)

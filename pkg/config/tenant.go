@@ -43,7 +43,7 @@ func NewTenantOperator(op StoreOperator) (TenantOperator, error) {
 		op:        op,
 		tenants:   map[string]struct{}{},
 		cancels:   []context.CancelFunc{},
-		observers: &observerBucket{observers: map[EventType][]*subscriber{}},
+		observers: &observerBucket{observers: map[EventType][]*subscriber{}}, //租户级的事件，生产到这里，这个结构轮训推送到各个subscriber
 	}
 
 	if err := tenantOp.init(); err != nil {

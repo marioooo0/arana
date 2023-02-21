@@ -64,6 +64,7 @@ func getRuleExprRegexp() *regexp.Regexp {
 	return _regexpRuleExpr
 }
 
+//conf.conf的配置发现
 type discovery struct {
 	inited  uatomic.Bool
 	path    string

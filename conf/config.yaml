@@ -28,18 +28,18 @@ data:
         - username: arana
           password: "123456"
       clusters:
-        - name: employees
+        - name: employees #逻辑库名
           type: mysql
           sql_max_limit: -1
           tenant: arana
           parameters:
             slow_threshold: 1s
             max_allowed_packet: 256M
-          groups:
-            - name: employees_0000
+          groups: #逻辑组映射
+            - name: employees_0000 #逻辑分库名
               nodes:
-                - node0
-                - node0_r_0
+                - node0 #逻辑分表主
+                - node0_r_0 #逻辑分表读
             - name: employees_0001
               nodes:
                 - node1

@@ -105,7 +105,7 @@ func (c Context) GetQuery() string {
 			return c.Stmt.StmtNode.Text()
 		}
 	}
-	return bytesconv.BytesToString(c.Data[1:])
+	return bytesconv.BytesToString(c.Data[1:]) //第一位是标识位，1之后是sql语句
 }
 
 func (c Context) GetArgs() []Value {

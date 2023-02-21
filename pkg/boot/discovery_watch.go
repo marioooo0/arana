@@ -32,6 +32,7 @@ var _ ConfigWatcher = (*discovery)(nil)
 func (fp *discovery) WatchTenants(ctx context.Context) (<-chan config.TenantsEvent, context.CancelFunc, error) {
 	ch := make(chan config.TenantsEvent)
 
+	//什么样的事件会被发送到这里？？
 	cancel := fp.tenantOp.Subscribe(ctx, func(e config.Event) {
 		ch <- *e.(*config.TenantsEvent)
 	})

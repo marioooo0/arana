@@ -38,10 +38,10 @@ import (
 	"github.com/arana-db/arana/pkg/util/log"
 )
 
-type watcher struct {
-	started   uatomic.Bool
+type watcher struct { //对discovery封装了一层，带cancel
+	started   uatomic.Bool //每个watcher只启动一次，防止重复更新。
 	discovery Discovery
-	tenant    string
+	tenant    string //每个租户一个watcher
 	cancels   []context.CancelFunc
 	cancel    context.CancelFunc
 }

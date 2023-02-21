@@ -413,6 +413,7 @@ func (c *Conn) recycleReadPacket() {
 	}
 	if c.currentEphemeralBuffer != nil {
 		// We are using the pool, put the buffer back in.
+		//todo 池化待研究
 		bufPool.Put(c.currentEphemeralBuffer)
 		c.currentEphemeralBuffer = nil
 	}

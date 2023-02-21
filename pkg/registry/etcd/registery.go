@@ -121,7 +121,7 @@ func (r *EtcdV3Registry) Register(ctx context.Context, name string, serviceInsta
 		return errors.Errorf("Register service name:%s marshal instance %v err:%v", name, serviceInstance, err)
 	}
 
-	err = r.client.Put(ctx, nodePath, serverInstanceBytes, int64(ttl.Seconds()))
+	err = r.client.Put(ctx, nodePath, serverInstanceBytes, int64(ttl.Seconds())) //为什么要把自己的endpoint注册到etcd上去？？
 	if err != nil {
 		log.Errorf("cannot create etcd path %s: %v", nodePath, err)
 		return err

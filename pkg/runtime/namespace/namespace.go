@@ -72,12 +72,12 @@ func Unregister(tenant, namespace string) error {
 
 type (
 	// Namespace represents a logical database with all resources.
-	Namespace struct {
+	Namespace struct { //todo 是cluster的实例吗？用于管理与数据库实例的链接
 		sync.Mutex
 
 		closed atomic.Bool
 
-		name string // the name of Namespace
+		name string // the name of Namespace // 是employees
 
 		rule atomic.Value // *rule.Rule
 
@@ -87,7 +87,7 @@ type (
 		parameters    config.ParametersMap
 		slowThreshold time.Duration
 
-		cmds chan Command  // command queue
+		cmds chan Command  // command queue //todo 具体含义
 		done chan struct{} // done notify
 
 		slowLog log.Logger
@@ -298,6 +298,7 @@ func (ns *Namespace) loopCmds() {
 	}
 }
 
+//返回 tenant：employees
 func getLoadKey(tenant, namespace string) string {
 	var sb strings.Builder
 	sb.Grow(len(tenant) + len(namespace) + 1)

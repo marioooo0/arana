@@ -62,11 +62,11 @@ func (bt *Booter) Boot(ctx context.Context) error {
 	}
 
 	for i := range tenants {
-		bt.bootTenant(ctx, tenants[i])
+		bt.bootTenant(ctx, tenants[i]) //指定了租户，租户下面的所有配置更新
 	}
 
 	go func() {
-		_ = bt.watchAllTenants(ctx)
+		_ = bt.watchAllTenants(ctx) //监听不同租户层面的变更
 	}()
 
 	return nil
@@ -118,7 +118,7 @@ func (bt *Booter) bootTenant(ctx context.Context, tenant string) {
 				errs = append(errs, err)
 				continue
 			}
-			if err := namespace.Register(tenant, ns); err != nil {
+			if err := namespace.Register(tenant, ns); err != nil { //
 				errs = append(errs, err)
 				continue
 			}
