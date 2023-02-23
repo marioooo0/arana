@@ -79,20 +79,20 @@ type Resource interface {
 // ResourcePool allows you to use a pool of resources.
 type ResourcePool struct {
 	// stats. Atomic fields must remain at the top in order to prevent panics on certain architectures.
-	available  *atomic.Int64
-	active     *atomic.Int64
-	inUse      *atomic.Int64
-	waitCount  *atomic.Int64
-	waitTime   *atomic.Duration
-	idleClosed *atomic.Int64
-	exhausted  *atomic.Int64
+	available  *atomic.Int64    //当前可供使用的资源数量（在池子里的）
+	active     *atomic.Int64    //当前活动的resource数量，resource关闭了则-1
+	inUse      *atomic.Int64    //当前在用的数量，inuse + availiable = active
+	waitCount  *atomic.Int64    //记录get过程等待的数量，只要是没有直接拿到的，都记录+1了，好像没有后续用途？？
+	waitTime   *atomic.Duration //记录get过程等待的时常
+	idleClosed *atomic.Int64    //因为空置而关闭的数量，但是计数只增不减，没有看懂？？
+	exhausted  *atomic.Int64    //记录枯竭的次数，只要availiable小于0一次，那么就+1
 
-	capacity    *atomic.Int64
-	idleTimeout *atomic.Duration
+	capacity    *atomic.Int64    //池子的当前容量
+	idleTimeout *atomic.Duration //每个资源的最大持续时间
 
-	resources chan resourceWrapper
-	factory   Factory
-	idleTimer *timer.Timer
+	resources chan resourceWrapper //资源本身，用了chan代替list做容器，大小定义为maxCap
+	factory   Factory              //资源本身包装成resource，new资源的方式交给外面扩展
+	idleTimer *timer.Timer         //空闲计时器
 	logWait   func(time.Time)
 }
 
@@ -234,7 +234,7 @@ func (rp *ResourcePool) get(ctx context.Context) (resource Resource, err error) 
 	var wrapper resourceWrapper
 	var ok bool
 	select {
-	case wrapper, ok = <-rp.resources:
+	case wrapper, ok = <-rp.resources: //直接拿到了
 	default:
 		startTime := time.Now()
 		select {
@@ -242,7 +242,7 @@ func (rp *ResourcePool) get(ctx context.Context) (resource Resource, err error) 
 		case <-ctx.Done():
 			return nil, ErrTimeout
 		}
-		rp.recordWait(startTime)
+		rp.recordWait(startTime) //没直接拿到，要么是等一会拿到了，要么是等过期了也没拿到，总之是记录一下等待的时间
 	}
 	if !ok {
 		return nil, ErrClosed

@@ -50,18 +50,19 @@ type baseShow struct {
 	filter interface{} // ExpressionNode or string
 }
 
+//将baseShow stmt再转化成sql字符串，这是给底层数据库用的
 func (bs *baseShow) Restore(flag RestoreFlag, sb *strings.Builder, args *[]int) error {
 	switch val := bs.filter.(type) {
-	case string:
+	case string: //filter里面的字符串节点 代表in
 		sb.WriteString(" IN ")
 		WriteID(sb, val)
 		return nil
 	case FromTable:
 		sb.WriteString(val.String())
 		return nil
-	case PredicateNode:
+	case PredicateNode: //谓语节点
 		return val.Restore(flag, sb, nil)
-	case ExpressionNode:
+	case ExpressionNode: //表达式节点
 		sb.WriteString(" WHERE ")
 		return val.Restore(flag, sb, args)
 	default:

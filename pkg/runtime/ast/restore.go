@@ -35,6 +35,7 @@ func (rf RestoreFlag) Has(flag RestoreFlag) bool {
 	return rf&flag != 0
 }
 
+//恢复器
 type Restorer interface {
 	Restore(flag RestoreFlag, sb *strings.Builder, args *[]int) error
 }

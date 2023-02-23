@@ -40,6 +40,15 @@ import (
 	"github.com/arana-db/arana/pkg/util/log"
 )
 
+/*
+sql语句优化器
+DAL(data access language):show??
+DML(data manipulation language)：SELECT、UPDATE、INSERT、DELETE 数据操作语言
+DDL(data definition language)：CREATE、ALTER、DROP等，定义或改变表(TABLE)的结构，数据类型，表之间的链接和约束等初始化工作
+DCL(Data Control Language)：用来设置或更改数据库用户或角色权限的语句，包括(grant,deny,revoke等)语句
+
+Parser ==> Optimizer ==> Execution Engine
+*/
 var _ proto.Optimizer = (*Optimizer)(nil)
 
 var Tracer = otel.Tracer("optimize")

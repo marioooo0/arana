@@ -630,6 +630,9 @@ func (cc *convCtx) convTruncateTableStmt(node *ast.TruncateTableStmt) Statement 
 	}
 }
 
+//node——>对应的stmt实例，将node中的属性填充到stmt实例中去
+//stmt node是用户输入的原始sql转化成的ast解析节点
+//转化成Statement是要方便arana项目本地做优化，Statement可以很方便的再生成sql语句
 func (cc *convCtx) convShowStmt(node *ast.ShowStmt) Statement {
 	toIn := func(node *ast.ShowStmt) (string, bool) {
 		if node.DBName == "" {
@@ -655,7 +658,9 @@ func (cc *convCtx) convShowStmt(node *ast.ShowStmt) Statement {
 		}
 		return cc.convPatternLikeExpr(node.Pattern), true
 	}
-	toLike := func(node *ast.ShowStmt) (string, bool) {
+	toLike := func(node *ast.ShowStmt) (string, bool) { //返回 ast node 当中含有正则表达式的字符串，比如'r%'
+		//【Q】node.Pattern 怎么获取的，如果有多个会怎么样？
+		//比如select id from employees where first_name like 'm%' and last_name like 'r%'
 		if node.Pattern == nil {
 			return "", false
 		}
@@ -745,7 +750,7 @@ func (cc *convCtx) convShowStmt(node *ast.ShowStmt) Statement {
 			Database: node.DBName,
 		}
 
-		if where, ok := toWhere(node); ok {
+		if where, ok := toWhere(node); ok { //如果这里既有where，又有like，会被覆盖吗
 			ret.baseShow.filter = where
 		}
 		if like, ok := toLike(node); ok {

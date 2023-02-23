@@ -55,8 +55,8 @@ type LRUCache struct {
 	mu sync.Mutex
 
 	// list & table contain *entry objects.
-	list  *list.List
-	table map[string]*list.Element
+	list  *list.List               //维护LRU用的
+	table map[string]*list.Element //find key用的
 
 	size      int64
 	capacity  int64

@@ -47,9 +47,10 @@ type IDPool struct {
 	sync.Mutex
 
 	// used holds the set of values that have been returned to us with Put().
+	//回收用过的ID，池化思想，注意只有当前没有被使用中的，才会放到这里面
 	used map[uint32]bool
 	// maxUsed remembers the largest value we've given out.
-	maxUsed uint32
+	maxUsed uint32 //正在使用的最大id值
 }
 
 // NewIDPool creates and initializes an IDPool.
@@ -66,7 +67,7 @@ func (pool *IDPool) Get() (id uint32) {
 
 	// Pick a value that's been returned, if any.
 	for key := range pool.used {
-		delete(pool.used, key)
+		delete(pool.used, key) //删除是因为这个map维护的是没有正在使用的，拿出来了就代表正在使用了。
 		return key
 	}
 
