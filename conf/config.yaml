@@ -21,7 +21,14 @@ metadata:
   name: arana-config
 data:
   tenants:
-    - name: tarana #理论上这个租户应该校验链接权限
+    - name: arana
+      sys_db:
+        host: arana-mysql
+        port: 3306
+        username: root
+        password: "123456"
+        # TODO It is recommended that the initialization of the subsequent system library be handled by arana internally
+        database: __arana_sys
       users:
         - username: root
           password: "123456"

@@ -34,6 +34,8 @@ import (
 	"github.com/arana-db/arana/pkg/proto/rule"
 	"github.com/arana-db/arana/pkg/runtime"
 	"github.com/arana-db/arana/pkg/runtime/namespace"
+	aranatenant "github.com/arana-db/arana/pkg/runtime/tenant"
+	"github.com/arana-db/arana/pkg/runtime/transaction"
 	_ "github.com/arana-db/arana/pkg/schema"
 	"github.com/arana-db/arana/pkg/security"
 	"github.com/arana-db/arana/pkg/util/log"
@@ -62,12 +64,15 @@ func (bt *Booter) Boot(ctx context.Context) error {
 	}
 
 	for i := range tenants {
+		log.Infof("start boot tenant=%s", tenants[i])
 		bt.bootTenant(ctx, tenants[i]) //指定了租户，租户下面的所有配置更新
 	}
 
 	go func() {
 		_ = bt.watchAllTenants(ctx) //监听不同租户层面的变更
 	}()
+
+	_ = namespace.List()
 
 	return nil
 }
@@ -118,7 +123,7 @@ func (bt *Booter) bootTenant(ctx context.Context, tenant string) {
 				errs = append(errs, err)
 				continue
 			}
-			if err := namespace.Register(tenant, ns); err != nil { //
+			if err := namespace.Register(tenant, ns); err != nil {
 				errs = append(errs, err)
 				continue
 			}
@@ -136,9 +141,19 @@ func (bt *Booter) bootTenant(ctx context.Context, tenant string) {
 		}
 	}
 
+	if conf, err := bt.discovery.GetSysDB(ctx, tenant); err != nil {
+		errs = append(errs, err)
+	} else {
+		aranatenant.RegisterSysDB(tenant, conf, runtime.NewAtomDB(conf))
+	}
+
+	if err := transaction.CreateTrxManager(tenant); err != nil {
+		errs = append(errs, err)
+	}
+
 	cost := time.Since(begin).Milliseconds()
 	if err := multierr.Combine(errs...); err != nil {
-		log.Errorf("[%s] boot failed after %dms: %v", tenant, err, cost)
+		log.Errorf("[%s] boot failed after %dms: %v", tenant, cost, err)
 	} else {
 		log.Infof("[%s] boot successfully after %dms", tenant, cost)
 	}
