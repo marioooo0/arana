@@ -105,6 +105,7 @@ var (
 	_ proto.VersionSupport = (*compositeTx)(nil)
 )
 
+//复合事务？
 type compositeTx struct {
 	closed atomic.Bool
 	id     int64

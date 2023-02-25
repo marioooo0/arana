@@ -21,7 +21,7 @@ metadata:
   name: arana-config
 data:
   tenants:
-    - name: arana
+    - name: tarana #理论上这个租户应该校验链接权限
       users:
         - username: root
           password: "123456"
@@ -38,8 +38,8 @@ data:
           groups: #逻辑组映射
             - name: employees_0000 #逻辑分库名
               nodes:
-                - node0 #逻辑分表主
-                - node0_r_0 #逻辑分表读
+                - node0 #逻辑分库主
+                - node0_r_0 #逻辑分库读，但是如何实现的数据同步不确定
             - name: employees_0001
               nodes:
                 - node1

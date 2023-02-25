@@ -297,8 +297,8 @@ func (executor *RedirectExecutor) doExecutorComQuery(ctx *proto.Context, act ast
 	return res, warn, err
 }
 
-//优化器在哪里？
-//调用mysql在哪里？
+//优化器在runtime.optimizer 用来生成plan
+//调用mysql在 plan包的各个ExecIn()函数中
 func (executor *RedirectExecutor) ExecutorComQuery(ctx *proto.Context, h func(result proto.Result, warns uint16, failure error) error) error {
 	p := parser.New()
 	query := ctx.GetQuery() //sql query语句

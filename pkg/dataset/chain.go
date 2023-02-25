@@ -83,12 +83,12 @@ type Option func(*pipeOption)
 
 func Pipe(root proto.Dataset, options ...Option) proto.Dataset {
 	var o pipeOption
-	for _, it := range options {
+	for _, it := range options { //把Option加入到pipeOption里面
 		it(&o)
 	}
 
 	next := root
-	for _, it := range o {
+	for _, it := range o { //pipeOption顺序执行
 		next = it(next)
 	}
 

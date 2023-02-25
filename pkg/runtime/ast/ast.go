@@ -91,7 +91,7 @@ func FromStmtNode(node ast.StmtNode) (Statement, error) {
 	case *ast.ShowStmt:
 		return cc.convShowStmt(stmt), nil
 	case *ast.ExplainStmt:
-		result, err := FromStmtNode(stmt.Stmt)
+		result, err := FromStmtNode(stmt.Stmt) //explain 递归调用，形成父子结构
 		if err != nil {
 			return nil, err
 		}
@@ -792,6 +792,7 @@ func ParseSelect(sql string, options ...ParseOption) ([]*hint.Hint, *SelectState
 }
 
 // Parse parses the SQL string to Statement.
+// 好像已经弃用了
 func Parse(sql string, options ...ParseOption) ([]*hint.Hint, Statement, error) {
 	var o parseOption
 	for _, it := range options {

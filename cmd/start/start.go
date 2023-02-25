@@ -75,6 +75,7 @@ func Run(bootstrapConfigPath string) {
 
 	discovery := boot.NewDiscovery(bootstrapConfigPath)
 
+	//启动
 	if err := boot.Boot(context.Background(), discovery); err != nil {
 		log.Fatal("start failed: %v", err)
 		return
@@ -82,6 +83,7 @@ func Run(bootstrapConfigPath string) {
 
 	propeller := server.NewServer()
 
+	//监听
 	listenersConf := discovery.ListListeners(context.Background())
 	for _, listenerConf := range listenersConf {
 		listener, err := mysql.NewListener(listenerConf)
@@ -116,6 +118,7 @@ func Run(bootstrapConfigPath string) {
 		log.Warnf("init supervisor failed: %v", err)
 	}
 
+	//listen函数
 	propeller.Start()
 
 	ctx, cancel := context.WithCancel(context.Background())
