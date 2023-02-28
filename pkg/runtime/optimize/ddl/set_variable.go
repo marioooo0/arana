@@ -32,6 +32,7 @@ func init() {
 	optimize.Register(ast.SQLTypeSetVariable, optimizeSetVariable)
 }
 
+// 设置mysql参数
 func optimizeSetVariable(_ context.Context, o *optimize.Optimizer) (proto.Plan, error) {
 	ret := &ddl.SetVariablePlan{Stmt: o.Stmt.(*ast.SetStatement)}
 	ret.BindArgs(o.Args)

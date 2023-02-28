@@ -27,7 +27,7 @@ import (
 type Topology struct {
 	mu                 sync.RWMutex
 	dbRender, tbRender func(int) string
-	idx                sync.Map // map[int][]int
+	idx                sync.Map // map[int][]int 例如：{0:[0,1,...,7]}
 }
 
 // Len returns the length of database and table.

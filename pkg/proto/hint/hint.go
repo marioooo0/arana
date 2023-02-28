@@ -116,11 +116,11 @@ func Parse(s string) (*Hint, error) {
 	if offset == -1 {
 		tpStr = s
 	} else {
-		tpStr = s[:offset]
+		tpStr = s[:offset] //开头到(之前的内容
 	}
 
 	for i, v := range _hintTypes {
-		if strings.EqualFold(tpStr, v) {
+		if strings.EqualFold(tpStr, v) { //判断两个utf-8编码字符串（将unicode大写、小写、标题三种格式字符视为相同）是否相同
 			tp = Type(i)
 			break
 		}
@@ -139,15 +139,15 @@ func Parse(s string) (*Hint, error) {
 		return nil, errors.Errorf("hint: invalid input '%s'", s)
 	}
 
-	s = s[offset+1 : end]
+	s = s[offset+1 : end] //括号里面的内容
 
-	scanner := bufio.NewScanner(strings.NewReader(s))
+	scanner := bufio.NewScanner(strings.NewReader(s)) //为什么不直接用strings.Split?
 	scanner.Split(scanComma)
 
 	var kvs []KeyValue
 
 	for scanner.Scan() {
-		text := scanner.Text()
+		text := scanner.Text() //scan与text配合，按split分割拿到每个元素，直到结束
 
 		// split kv by '='
 		i := strings.Index(text, "=")
@@ -156,7 +156,7 @@ func Parse(s string) (*Hint, error) {
 			if misc.IsBlank(text) {
 				continue
 			}
-			kvs = append(kvs, KeyValue{V: strings.TrimSpace(text)})
+			kvs = append(kvs, KeyValue{V: strings.TrimSpace(text)}) //没有任何=，那么k=空，v=去掉空格后text
 		} else {
 			var (
 				k = strings.TrimSpace(text[:i])
@@ -166,7 +166,7 @@ func Parse(s string) (*Hint, error) {
 			if misc.IsBlank(k) || misc.IsBlank(v) {
 				continue
 			}
-			kvs = append(kvs, KeyValue{K: k, V: v})
+			kvs = append(kvs, KeyValue{K: k, V: v}) //按照=拆分kv
 		}
 	}
 

@@ -40,6 +40,9 @@ func init() {
 	optimize.Register(ast.SQLTypeInsertSelect, optimizeInsertSelect)
 }
 
+// insert
+// 表未分片：
+// 表有分片：
 func optimizeInsert(ctx context.Context, o *optimize.Optimizer) (proto.Plan, error) {
 	ret := dml.NewSimpleInsertPlan()
 	ret.BindArgs(o.Args)

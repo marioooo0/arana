@@ -35,6 +35,9 @@ func init() {
 	optimize.Register(ast.SQLTypeDropTable, optimizeDropTable)
 }
 
+// 删除表
+// 不分表情况：需要当前表名
+// 分表情况：需要库：表映射
 func optimizeDropTable(ctx context.Context, o *optimize.Optimizer) (proto.Plan, error) {
 	stmt := o.Stmt.(*ast.DropTableStatement)
 	// table shard

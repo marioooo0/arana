@@ -61,8 +61,9 @@ func (l *Listener) handleInitDB(c *Conn, ctx *proto.Context) error {
 	return nil
 }
 
+//ExecuteCommand——> handleQuery(接收packet，包装处理result && err)
 func (l *Listener) handleQuery(c *Conn, ctx *proto.Context) error {
-	c.recycleReadPacket()
+	c.recycleReadPacket() //【Q】循环读包有什么用处？data外面已经读过了
 
 	handleOnce := func(result proto.Result, failure error, warn uint16, hasMore bool) error {
 		c.startWriterBuffering()

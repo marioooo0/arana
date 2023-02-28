@@ -33,6 +33,9 @@ func init() {
 	optimize.Register(ast.SQLTypeAlterTable, optimizeAlterTable)
 }
 
+// 更改表中的列
+// 需要逻辑表中的所有拓扑元素
+// 默认取最后一个表名
 func optimizeAlterTable(_ context.Context, o *optimize.Optimizer) (proto.Plan, error) {
 	var (
 		stmt  = o.Stmt.(*ast.AlterTableStatement)
@@ -44,6 +47,7 @@ func optimizeAlterTable(_ context.Context, o *optimize.Optimizer) (proto.Plan, e
 	ret.BindArgs(o.Args)
 
 	// non-sharding update
+	// 如果传入student0001，那么会映射到student，如果找不到对应虚拟表，直接返回
 	if vt, ok = o.Rule.VTable(table.Suffix()); !ok {
 		return ret, nil
 	}

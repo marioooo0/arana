@@ -33,6 +33,8 @@ func init() {
 	optimize.Register(ast.SQLTypeOptimizeTable, optimizeOptimizeTable)
 }
 
+// 优化表
+// 需要分片规则
 func optimizeOptimizeTable(ctx context.Context, o *optimize.Optimizer) (proto.Plan, error) {
 	shards := rule.DatabaseTables{}
 	shardsByName := make(map[string]rule.DatabaseTables)

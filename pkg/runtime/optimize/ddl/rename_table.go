@@ -33,6 +33,9 @@ func init() {
 	optimize.Register(ast.SQLTypeRenameTable, optimizeRenameTable)
 }
 
+// 表重命名
+// 需要分片信息
+// 只要一个就行
 func optimizeRenameTable(ctx context.Context, o *optimize.Optimizer) (proto.Plan, error) {
 	shards := rule.DatabaseTables{}
 	shardsByName := make(map[string]rule.DatabaseTables)

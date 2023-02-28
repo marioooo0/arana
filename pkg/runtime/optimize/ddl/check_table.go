@@ -33,12 +33,14 @@ func init() {
 	optimize.Register(ast.SQLTypeCheckTable, optimizeCheckTable)
 }
 
+// 检查表拓扑是否存在、表是否有错误
+// 需要表名：拓扑结构
 func optimizeCheckTable(ctx context.Context, o *optimize.Optimizer) (proto.Plan, error) {
 	shards := rule.DatabaseTables{}
 	shardsByName := make(map[string]rule.DatabaseTables)
 
 	for _, table := range o.Rule.VTables() {
-		shards = table.Topology().Enumerate()
+		shards = table.Topology().Enumerate() //库：表
 		shardsByName[table.Name()] = shards
 		break
 	}

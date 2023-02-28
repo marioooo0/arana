@@ -33,16 +33,18 @@ func init() {
 	optimize.Register(ast.SQLTypeDropIndex, optimizeDropIndex)
 }
 
+// 删除索引
+// 需要库：表映射
 func optimizeDropIndex(ctx context.Context, o *optimize.Optimizer) (proto.Plan, error) {
 	stmt := o.Stmt.(*ast.DropIndexStatement)
 	// table shard
-
+	//【Q】这里到底处理了啥，需要debug
 	shard, err := o.ComputeShards(ctx, stmt.Table, nil, o.Args)
 	if err != nil {
 		return nil, err
 	}
 	if len(shard) == 0 {
-		return plan.Transparent(stmt, o.Args), nil
+		return plan.Transparent(stmt, o.Args), nil //这里需要debug
 	}
 
 	shardPlan := ddl.NewDropIndexPlan(stmt)

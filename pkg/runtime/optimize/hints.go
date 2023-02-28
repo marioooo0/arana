@@ -113,6 +113,7 @@ func (h *Direct) exec(tableName ast.TableName, rule *rule.Rule, hints []*hint.Hi
 	return hintTables, nil
 }
 
+// 输出对应拓扑关系{"db_n": "tb_m"}，强制链接到用户指定的db、table
 type CustomRoute struct{}
 
 func (c *CustomRoute) exec(tableName ast.TableName, r *rule.Rule, hints []*hint.Hint) (hintTables rule.DatabaseTables, err error) {
@@ -122,7 +123,7 @@ func (c *CustomRoute) exec(tableName ast.TableName, r *rule.Rule, hints []*hint.
 			continue
 		}
 		for _, i := range h.Inputs {
-			tb := strings.Split(i.V, ".")
+			tb := strings.Split(i.V, ".") //route(db_n.tb_m)，要按照指定的db，tb序号链接
 			hintTables[tb[0]] = append(hintTables[tb[0]], tb[1])
 		}
 	}

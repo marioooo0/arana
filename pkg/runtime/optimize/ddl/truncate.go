@@ -37,6 +37,8 @@ func init() {
 	optimize.Register(ast.SQLTypeTruncate, optimizeTruncate)
 }
 
+// 清空or截断表
+// 需要分片信息、args
 func optimizeTruncate(ctx context.Context, o *optimize.Optimizer) (proto.Plan, error) {
 	stmt := o.Stmt.(*ast.TruncateStatement)
 	shards, err := o.ComputeShards(ctx, stmt.Table, nil, o.Args)

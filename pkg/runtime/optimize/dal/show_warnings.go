@@ -33,6 +33,8 @@ func init() {
 	optimize.Register(ast.SQLTypeShowWarnings, optimizeShowWarnings)
 }
 
+// 类似于show error，展示错误、告警
+// 需要表拓扑关系
 func optimizeShowWarnings(ctx context.Context, o *optimize.Optimizer) (proto.Plan, error) {
 	shards := rule.DatabaseTables{}
 	for _, table := range o.Rule.VTables() {

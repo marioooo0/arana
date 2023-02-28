@@ -40,6 +40,7 @@ type aggregateVisitor struct {
 	aggregations []*ast.SelectElementFunction
 }
 
+// 【Q】聚合visitor不太理解
 func (av *aggregateVisitor) VisitSelectStatement(node *ast.SelectStatement) (interface{}, error) {
 	var rebuilds []ast.SelectElement
 	for _, next := range node.Select {

@@ -407,6 +407,9 @@ func (pi *defaultRuntime) Exec(ctx context.Context, db string, query string, arg
 	return res, nil
 }
 
+//非tx的一般执行
+//ExecuteCommand——> handleQuery——> ExecutorComQuery——> doExecutorComQuery
+//——> defaultRuntime.Execute（映射optimizer）
 func (pi *defaultRuntime) Execute(ctx *proto.Context) (res proto.Result, warn uint16, err error) {
 	var span trace.Span
 	ctx.Context, span = Tracer.Start(ctx.Context, "defaultRuntime.Execute")
@@ -441,12 +444,16 @@ func (pi *defaultRuntime) Execute(ctx *proto.Context) (res proto.Result, warn ui
 		return
 	}
 
+	//优化器——>plan
+	//不同plan需要的fields很不一样，optimizer就相当于是plan的new方法
 	if plan, err = opt.Optimize(ctx); err != nil {
 		err = perrors.WithStack(err)
 		return
 	}
 	metrics.OptimizeDuration.Observe(time.Since(start).Seconds())
 
+	//plan 执行
+	//【Q】针对不同的sql语句，优化处理的点
 	if res, err = plan.ExecIn(ctx, pi); err != nil {
 		// TODO: how to warp error packet
 		if sqlErr, ok := perrors.Cause(err).(*errors2.SQLError); ok {

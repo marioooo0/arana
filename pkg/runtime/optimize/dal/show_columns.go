@@ -32,6 +32,9 @@ func init() {
 	optimize.Register(ast.SQLTypeShowColumns, optimizeShowColumns)
 }
 
+// 显示表中列名称，等同于show fields
+// 需要args、拓扑结构中的最小号作为当前table name
+// 默认同一个vtable下面拓扑结构都应该相同
 func optimizeShowColumns(_ context.Context, o *optimize.Optimizer) (proto.Plan, error) {
 	stmt := o.Stmt.(*ast.ShowColumns)
 

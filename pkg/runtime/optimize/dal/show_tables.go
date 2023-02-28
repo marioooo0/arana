@@ -32,6 +32,8 @@ func init() {
 	optimize.Register(ast.SQLTypeShowTables, optimizeShowTables)
 }
 
+// 显示当前数据库中所有表名
+// 需要物理表：虚拟表的映射关系
 func optimizeShowTables(_ context.Context, o *optimize.Optimizer) (proto.Plan, error) {
 	stmt := o.Stmt.(*ast.ShowTables)
 	var invertedIndex map[string]string

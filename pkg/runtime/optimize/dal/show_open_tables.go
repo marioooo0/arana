@@ -36,6 +36,7 @@ func init() {
 	optimize.Register(ast.SQLTypeShowOpenTables, optimizeShowOpenTables)
 }
 
+//需要每个逻辑库的 物理表：逻辑表映射、args、逻辑库名
 func optimizeShowOpenTables(ctx context.Context, o *optimize.Optimizer) (proto.Plan, error) {
 	var invertedIndex map[string]string
 	for logicalTable, v := range o.Rule.VTables() {

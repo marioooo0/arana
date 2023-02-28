@@ -32,6 +32,7 @@ func init() {
 	optimize.Register(ast.SQLTypeShowDatabases, optimizeShowDatabases)
 }
 
+// 显示所有数据库名称，是物理库/逻辑库？
 func optimizeShowDatabases(_ context.Context, o *optimize.Optimizer) (proto.Plan, error) {
 	ret := &dal.ShowDatabasesPlan{Stmt: o.Stmt.(*ast.ShowDatabases)}
 	ret.BindArgs(o.Args)

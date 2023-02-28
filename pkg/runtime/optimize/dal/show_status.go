@@ -33,6 +33,8 @@ func init() {
 	optimize.Register(ast.SQLTypeShowStatus, optimizeShowStatus)
 }
 
+//显示系统资源信息
+//需要args
 func optimizeShowStatus(_ context.Context, o *optimize.Optimizer) (proto.Plan, error) {
 	stmt := o.Stmt.(*ast.ShowStatus)
 

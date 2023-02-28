@@ -33,6 +33,8 @@ func init() {
 	optimize.Register(ast.SQLTypeShowTableStatus, optimizeShowTablesStatus)
 }
 
+//指定数据库中，每个表的信息
+//需要指定数据库的拓扑关系
 func optimizeShowTablesStatus(ctx context.Context, o *optimize.Optimizer) (proto.Plan, error) {
 	shards := rule.DatabaseTables{}
 	for _, table := range o.Rule.VTables() {

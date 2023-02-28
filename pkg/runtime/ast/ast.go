@@ -72,6 +72,7 @@ func WithCollation(collation string) ParseOption {
 }
 
 // FromStmtNode converts raw ast node to Statement.
+// 【Q】ast.Node ——> Statement 是更本地化，更方便后续处理吗？
 func FromStmtNode(node ast.StmtNode) (Statement, error) {
 	var cc convCtx
 	switch stmt := node.(type) {

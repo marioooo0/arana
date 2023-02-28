@@ -33,6 +33,8 @@ func init() {
 	optimize.Register(ast.SQLTypeDropTrigger, optimizeTrigger)
 }
 
+// 删除触发器
+// 需要分片信息 库：表
 func optimizeTrigger(_ context.Context, o *optimize.Optimizer) (proto.Plan, error) {
 	shards := rule.DatabaseTables{}
 	for _, table := range o.Rule.VTables() {

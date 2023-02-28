@@ -234,6 +234,7 @@ func (tx *compositeTx) String() string {
 	return fmt.Sprintf("tx-%s", tx.id)
 }
 
+//【Q】transation 相关的执行
 func (tx *compositeTx) Execute(ctx *proto.Context) (res proto.Result, warn uint16, err error) {
 	var span trace.Span
 	ctx.Context, span = Tracer.Start(ctx.Context, "compositeTx.Execute")

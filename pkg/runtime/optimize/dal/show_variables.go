@@ -32,6 +32,8 @@ func init() {
 	optimize.Register(ast.SQLTypeShowVariables, optimizeShowVariables)
 }
 
+// 显示mysql系统变量
+// 需要args
 func optimizeShowVariables(_ context.Context, o *optimize.Optimizer) (proto.Plan, error) {
 	ret := dal.NewShowVariablesPlan(o.Stmt.(*ast.ShowVariables))
 	ret.BindArgs(o.Args)

@@ -39,6 +39,8 @@ func init() {
 	optimize.Register(ast.SQLTypeShowProcessList, optimizeShowProcessList)
 }
 
+// 显示系统中正在执行的所有查询命令
+// 需要所有逻辑库名
 func optimizeShowProcessList(ctx context.Context, o *optimize.Optimizer) (proto.Plan, error) {
 	stmt := o.Stmt.(*ast.ShowProcessList)
 

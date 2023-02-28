@@ -209,6 +209,7 @@ func (l *Listener) handle(conn net.Conn, connectionID uint32) {
 			Data:    content,
 		}
 
+		//执行sql指令
 		if err = l.ExecuteCommand(c, ctx); err != nil {
 			if err == io.EOF {
 				log.Debugf("the connection#%d of remote client %s requests quit", c.ID(), c.conn.(*net.TCPConn).RemoteAddr())
@@ -562,8 +563,9 @@ func (l *Listener) ValidateHash(handshake *handshakeResult) error {
 	return nil
 }
 
+//ExecuteCommand（data首位标识——> 不同handle方法）
 func (l *Listener) ExecuteCommand(c *Conn, ctx *proto.Context) error {
-	commandType := ctx.Data[0]
+	commandType := ctx.Data[0] //【Q】data0是哪里约束的？
 	switch commandType {
 	case mysql.ComQuit:
 		// https://dev.mysql.com/doc/internals/en/com-quit.html

@@ -45,6 +45,8 @@ func init() {
 	optimize.Register(ast.SQLTypeKill, optimizeKill)
 }
 
+// arana自有命令
+// 需要连接id、租户下的逻辑组信息
 func optimizeKill(ctx context.Context, o *optimize.Optimizer) (proto.Plan, error) {
 	stmt := o.Stmt.(*ast.KillStmt)
 	ret := dal.NewKillPlan(stmt)

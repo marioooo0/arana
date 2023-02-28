@@ -32,6 +32,7 @@ func init() {
 	optimize.Register(ast.SQLTypeShowCollation, optimizeShowCollation)
 }
 
+//只需要stmt信息
 func optimizeShowCollation(_ context.Context, o *optimize.Optimizer) (proto.Plan, error) {
 	stmt := o.Stmt.(*ast.ShowCollation)
 	ret := &dal.ShowCollationPlan{Stmt: stmt}

@@ -149,6 +149,8 @@ func (executor *RedirectExecutor) ExecuteFieldList(ctx *proto.Context) ([]proto.
 	return db.CallFieldList(ctx.Context, table, wildcard)
 }
 
+//ExecuteCommand——> handleQuery——> ExecutorComQuery
+//——> doExecutorComQuery（根据ast.Node类型执行对应动作：Begin、Commit、Excute）
 func (executor *RedirectExecutor) doExecutorComQuery(ctx *proto.Context, act ast.StmtNode) (proto.Result, uint16, error) {
 	// switch DB
 	switch u := act.(type) {
@@ -164,8 +166,9 @@ func (executor *RedirectExecutor) doExecutorComQuery(ctx *proto.Context, act ast
 		schemaless bool // true if schema is not specified
 		err        error
 	)
+	//【Q】Hint里面有什么？
 	var hints []*hint.Hint
-	for _, next := range act.Hints() {
+	for _, next := range act.Hints() { //此处ast.Hint是否也是括号形式语法
 		var h *hint.Hint
 		if h, err = hint.Parse(next); err != nil {
 			return nil, 0, err
@@ -302,8 +305,8 @@ func (executor *RedirectExecutor) doExecutorComQuery(ctx *proto.Context, act ast
 	return res, warn, err
 }
 
-//优化器在runtime.optimizer 用来生成plan
-//调用mysql在 plan包的各个ExecIn()函数中
+//ExecuteCommand——> handleQuery
+//——> ExecutorComQuery(拆分多个sql语句，转化ast.Node)
 func (executor *RedirectExecutor) ExecutorComQuery(ctx *proto.Context, h func(result proto.Result, warns uint16, failure error) error) error {
 	p := parser.New()
 	query := ctx.GetQuery() //sql query语句
@@ -312,6 +315,7 @@ func (executor *RedirectExecutor) ExecutorComQuery(ctx *proto.Context, h func(re
 	charset, collation := getCharsetCollation(ctx.C.CharacterSet())
 
 	//fast path
+	//【Q】ast解析过程，直接看很难懂，需要debug辅助
 	switch strings.IndexByte(query, ';') {
 	case -1: // no ';' exists
 		stmt, err := p.ParseOneStmt(query, charset, collation)

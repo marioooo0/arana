@@ -32,6 +32,8 @@ func init() {
 	optimize.Register(ast.SQLTypeCreateIndex, optimizeCreateIndex)
 }
 
+// 创建索引
+// 需要逻辑库名拓扑所有元素
 func optimizeCreateIndex(_ context.Context, o *optimize.Optimizer) (proto.Plan, error) {
 	stmt := o.Stmt.(*ast.CreateIndexStatement)
 	ret := ddl.NewCreateIndexPlan(stmt)

@@ -33,6 +33,7 @@ func init() {
 	optimize.Register(ast.SQLTypeShowCharacterSet, optimizeShowCharacterSet)
 }
 
+//需要逻辑表下的拓扑结构、args（包括charset）
 func optimizeShowCharacterSet(_ context.Context, o *optimize.Optimizer) (proto.Plan, error) {
 	stmt := o.Stmt.(*ast.ShowCharset)
 	shards := rule.DatabaseTables{}

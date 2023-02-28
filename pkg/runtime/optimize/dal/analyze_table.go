@@ -33,6 +33,9 @@ func init() {
 	optimize.Register(ast.SQLTypeAnalyzeTable, optimizeAnalyzeTable)
 }
 
+// arana 自有命令
+// 需要每个逻辑表下的拓扑结构
+// 例如：student_${0000..0031}
 func optimizeAnalyzeTable(ctx context.Context, o *optimize.Optimizer) (proto.Plan, error) {
 	shards := rule.DatabaseTables{}
 	shardsByName := make(map[string]rule.DatabaseTables)

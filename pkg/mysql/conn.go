@@ -406,6 +406,7 @@ func (c *Conn) readEphemeralPacketDirect() ([]byte, error) {
 
 // recycleReadPacket recycles the read packet. It needs to be called
 // after readEphemeralPacket was called.
+// 【Q】链接层的具体实现？
 func (c *Conn) recycleReadPacket() {
 	if c.currentEphemeralPolicy != ephemeralRead {
 		// Programming error.

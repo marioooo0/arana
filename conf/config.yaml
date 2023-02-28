@@ -21,7 +21,7 @@ metadata:
   name: arana-config
 data:
   tenants:
-    - name: arana
+    - name: arana #建立链接的时候，应该有前置的校验，先选择租户，但是没有看到相关逻辑
       sys_db:
         host: arana-mysql
         port: 3306

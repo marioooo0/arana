@@ -33,6 +33,9 @@ func init() {
 	optimize.Register(ast.SQLTypeShowIndex, optimizeShowIndex)
 }
 
+// 显示指定表的所有索引
+// 需要最后一个逻辑表的 库名：表名映射
+// 默认取库0：表0
 func optimizeShowIndex(_ context.Context, o *optimize.Optimizer) (proto.Plan, error) {
 	stmt := o.Stmt.(*ast.ShowIndex)
 

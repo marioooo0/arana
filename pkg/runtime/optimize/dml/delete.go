@@ -37,6 +37,8 @@ func init() {
 	optimize.Register(ast.SQLTypeDelete, optimizeDelete)
 }
 
+//删除表中数据
+// 需要分片信息
 func optimizeDelete(ctx context.Context, o *optimize.Optimizer) (proto.Plan, error) {
 	stmt := o.Stmt.(*ast.DeleteStatement)
 

@@ -36,6 +36,8 @@ func init() {
 	optimize.Register(ast.SQLTypeShowCreate, optimizeShowCreate)
 }
 
+// 需要args、库名、表名
+// 默认取0号库，0号表了
 func optimizeShowCreate(_ context.Context, o *optimize.Optimizer) (proto.Plan, error) {
 	stmt := o.Stmt.(*ast.ShowCreate)
 

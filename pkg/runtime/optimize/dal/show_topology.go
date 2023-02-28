@@ -32,6 +32,8 @@ func init() {
 	optimize.Register(ast.SQLTypeShowTopology, optimizeShowTopology)
 }
 
+// arana自有show：展示拓扑关系
+// 需要全部rules
 func optimizeShowTopology(_ context.Context, o *optimize.Optimizer) (proto.Plan, error) {
 	rule := o.Rule
 	stmt := o.Stmt.(*ast.ShowTopology)
